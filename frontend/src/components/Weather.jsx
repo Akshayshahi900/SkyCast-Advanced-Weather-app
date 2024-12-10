@@ -3,6 +3,7 @@ import WeatherCard from './WeatherCard';
 import Clock from './Clock';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateLocation, updateSearchedLocation, setWeatherData, clearWeatherData } from '../redux/weatherSlice';
+import HourlyForecast from './Hourlyforecast';
 
 const Weather = () => {
   const location = useSelector((state) => state.weather.location);  // Access current input
@@ -18,40 +19,7 @@ const Weather = () => {
 
 
 
-  const currentLocation = async () => {
-    const apiKey = 'a53101a110d948510b69e1a997d824a3'; // Replace with your OpenWeatherMap API key
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`
-            );
-            if (!response.ok) {
-              throw new Error(`Error: ${response.statusText}`);
-            }
-            const weatherData = await response.json();
-            console.log("Weather data for current location:", weatherData);
-            // Handle the weather data (e.g., update the UI)
-          } catch (error) {
-            console.error("Failed to fetch weather data:", error);
-          }
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error.message);
-          alert(`Error getting geolocation: ${error.message}`);
-        }
-      );
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
-  };
-
-  // Call the function
-  // currentLocation();
-  // Handle search button click
   const handleSearch = async () => {
     if (!location) return;  // Do nothing if input is empty
 
@@ -127,7 +95,12 @@ const Weather = () => {
 
         )}
       </div>
+      <HourlyForecast location={searchedLocation} />
+
     </div>
+
+
+
   );
 };
 

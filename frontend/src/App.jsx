@@ -1,6 +1,6 @@
 import React from 'react'
 import Weather from './components/Weather.jsx'
-
+import HourlyForecast from './components/Hourlyforecast.jsx'
 
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
 
 
       <Weather />
-
+      <HourlyForecast />
     </div>
   )
 }
