@@ -36,23 +36,32 @@ const Clock = () => {
   }, []);
 
   return (
-    <div style={{
-      background: 'rgb(68, 68, 68)',
-      padding: '20px',
-      borderRadius: '15px',
-      color: '#fff',
-      width: '510px',
-      height: '330px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'Arial, sans-serif',
-      boxShadow: '15px 18px 19px rgba(15,15,15, 0.89)',
-    }}>
-      <h2 className='text-6xl font-bold'>{capitalizeCityName(cityName)}</h2> {/* Capitalize city name */}
-      {formattedTime && <h4 className='text-8xl font-bold'>{formattedTime}</h4>} {/* Display formatted time */}
-      {formattedDate && <h3 className='text-3xl font-bold'>{formattedDate}</h3>} {/* Display formatted date */}
+    // <div style={{
+    //   background: '',
+    //   padding: '20px',
+    //   borderRadius: '15px',
+    //   color: '',
+    //   width: '510px',
+    //   height: '330px',
+    //   display: 'flex',
+    //   flexDirection: 'column',
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    //   fontFamily: 'Arial, sans-serif',
+    //   boxShadow: '',
+    // }}>
+    <div className='bg-customWhite p-4 mt-9 w-[40vw] min-h-30 flex rounded-3xl '>
+      <div className=' w-full '>
+        <h2 className=''>Current Weather</h2>
+        <h2 className='text-xl font-bold '>{capitalizeCityName(cityName)}</h2> 
+        {formattedTime && <h4 className='text-xl font-bold'>{formattedTime}</h4>} {/* Display formatted time */}
+        {formattedDate && <h3 className='text-xl font-bold'>{formattedDate}</h3>} 
+      </div>
+
+      <select className="w-28">
+        <option value="celsius">Celsius</option>
+        <option value="fahrenheit">Fahrenheit</option>
+      </select>
     </div>
   );
 };

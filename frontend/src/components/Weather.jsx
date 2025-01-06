@@ -1,27 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import WeatherCard from './WeatherCard';
 import Clock from './Clock';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateLocation, updateSearchedLocation, setWeatherData, clearWeatherData } from '../redux/weatherSlice';
-import HourlyForecast from './Hourlyforecast';
+import {
+  updateLocation,
+  updateSearchedLocation,
+  setWeatherData,
+  clearWeatherData,
+} from '../redux/weatherSlice';
+import HourlyForecast from './ui/HourlyForecast';
+import WeaklyForecast from './ui/WeaklyForecast';
+import WeatherNews from './ui/WeatherNews';
 
 const Weather = () => {
-  const location = useSelector((state) => state.weather.location);  // Access current input
-  const searchedLocation = useSelector((state) => state.weather.searchedLocation);  // Access last searched city
-  const weatherData = useSelector((state) => state.weather.weatherData);  // Access weather data
-
+  const location = useSelector((state) => state.weather.location);
+  const searchedLocation = useSelector((state) => state.weather.searchedLocation);
+  const weatherData = useSelector((state) => state.weather.weatherData);
   const dispatch = useDispatch();
 
-  // Handle input change
+  const [activeTab, setActiveTab] = useState('hourly'); // Default to "Hourly"
+  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
+
+  useEffect(() => {
+    const savedNotificationSetting = localStorage.getItem('notificationsEnabled');
+    if (savedNotificationSetting !== null) {
+      setIsNotificationsEnabled(JSON.parse(savedNotificationSetting));
+    }
+  }, []);
+
   const handleLocationChange = (event) => {
-    dispatch(updateLocation(event.target.value));  // Update the input value in Redux
+    dispatch(updateLocation(event.target.value));
   };
 
-
-
-
   const handleSearch = async () => {
-    if (!location) return;  // Do nothing if input is empty
+    if (!location) return;
 
     try {
       const response = await fetch(`http://localhost:3000/api/weather?city=${location}`);
@@ -30,77 +42,110 @@ const Weather = () => {
       }
 
       const data = await response.json();
-      dispatch(setWeatherData(data));  // Save weather data in Redux
-      dispatch(updateSearchedLocation());  // Save the searched city in Redux
+      dispatch(setWeatherData(data));
+      dispatch(updateSearchedLocation());
     } catch (error) {
-      console.error("Error fetching data:", error);
-      dispatch(clearWeatherData());  // Clear data in case of error
-      alert("Failed to fetch weather data.");
+      console.error('Error fetching data:', error);
+      dispatch(clearWeatherData());
+      alert('Failed to fetch weather data.');
     }
   };
 
   return (
-    <div>
-      <div className='flex items-center justify-center p-2'>
+    <div className="grid gap-8 p-6">
+      {/* Search Bar */}
+      <div className="flex items-center justify-center">
         <img
           onClick={handleSearch}
-          className='w-10 position relative left-12 cursor-pointer'
+          className="w-10 relative left-12 cursor-pointer"
           src="./search.png"
           alt="Search"
         />
         <input
           type="text"
-          style={{ background: 'linear-gradient(to right, rgb(58, 58, 58), rgb(48, 48, 48))' }}
-          value={location} // Bind input value to Redux state
-          onChange={handleLocationChange} // Call handler to update Redux state
-          placeholder='Search for your preferred city...'
-          className='text-md text-gray-400 w-[450px] py-6 h-10 px-14 border-2 rounded-[20px] focus:border-2-gray-600'
+          value={location}
+          onChange={handleLocationChange}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleSearch();
+            }
+          }}
+          placeholder="Search for your preferred city..."
+          className="text-md w-[450px] h-10 px-14 py-2 border rounded-3xl focus:outline-none focus:ring focus:ring-gray-300"
         />
-
-        <button
-          style={{ backgroundColor: 'rgba(76, 187, 23, 1)' }}
-          className="border rounded-3xl flex items-center gap-1 m-2 text-white font-semibold py-2 px-4 shadow-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition-all"
-          onClick={handleSearch} // Use the search function
-        >
-          <img src="./location.png" className='w-8' alt="Location" />
-          <h1 className='text-md'> Search Location</h1>
-        </button>
+        <img
+          src="./location.png"
+          className="w-10 relative right-[41px] cursor-pointer bg-gray-300 border rounded-r-full"
+          alt="Location"
+          onClick={handleSearch}
+        />
       </div>
 
-      <div className='flex gap-4 justify-around'>
-        {searchedLocation && weatherData ? <Clock cityName={searchedLocation} /> : null}
-        {searchedLocation && weatherData ? (
-          <WeatherCard weatherData={weatherData} />
-        ) : (
-          <div
-            // style={{ background: 'linear-gradient(to right, rgb(58, 58, 58), rgb(48, 48, 48))' }}
-            className='text-white text-center  p-8 rounded-xl shadow-2xl max-w-9xl mx-auto mt-10'>
-            <h1 style={{
-              backgroundImage: "url('./logo.jpg')", // Add your image URL here
-              backgroundSize: 'cover', // Ensures the image covers the text
-              backgroundPosition: 'center', // Centers the background image
-              backgroundClip: 'text', // Clips the background to the text
-              WebkitBackgroundClip: 'text', // For webkit browsers
-              color: 'transparent', // Makes the text transparent to show the background
-            }} className='text-8xl font-bold mb-4 tracking-wider'>Welcome to SkyCast</h1>
-            <p className='text-3xl font-medium mb-6 tracking-wide'>
-              Your one-stop platform for real-time weather updates.
-            </p>
-
-            <p className='text-xl italic opacity-75'>
-              Powered by cutting-edge weather APIs to bring you accurate and up-to-date information, wherever you are.
-            </p>
-
+      {/* Main Content */}
+      {!searchedLocation || !weatherData ? (
+        <div className="text-center p-8 rounded-xl shadow-2xl max-w-9xl mx-auto mt-10">
+          <h1
+            style={{
+              backgroundImage: "url('./logo.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}
+            className="text-8xl font-bold mb-4 tracking-wider"
+          >
+            Welcome to SkyCast
+          </h1>
+          <p className="text-3xl font-medium mb-6 tracking-wide">
+            Your one-stop platform for real-time weather updates.
+          </p>
+          <p className="text-xl italic opacity-75">
+            Powered by cutting-edge weather APIs to bring you accurate and up-to-date information, wherever you are.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Left Side: Weather and Clock */}
+          <div className="space-y-6">
+            <Clock cityName={searchedLocation} />
+            <WeatherCard weatherData={weatherData} city={searchedLocation} />
           </div>
 
-        )}
-      </div>
-      <HourlyForecast location={searchedLocation} />
+          {/* Right Side: Hourly or Weekly Forecast */}
+          <div>
+            {/* Toggle Bar Above Right-Side Content */}
+            <div className="justify-center gap-4 mb-4 bg-customWhite p-4 mt-9 w-[40vw] min-h-30 flex rounded-3xl ">
+              <button
+                onClick={() => setActiveTab('hourly')}
+                className={`px-4 py-2 rounded-xl text-lg font-semibold ${
+                  activeTab === 'hourly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                }`}
+              >
+                Hourly
+              </button>
+              <button
+                onClick={() => setActiveTab('weekly')}
+                className={`px-4 py-2 rounded-xl text-lg font-semibold ${
+                  activeTab === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                }`}
+              >
+                Weekly
+              </button>
+            </div>
+            {/* Content Based on Active Tab */}
+            {activeTab === 'hourly' ? (
+              <HourlyForecast city={searchedLocation} />
+            ) : (
+              <WeaklyForecast city={searchedLocation} />
+            )}
+          </div>
+        </div>
+      )}
 
+      {/* Weekly Forecast and Weather News */}
+      {searchedLocation && weatherData && <WeatherNews />}
     </div>
-
-
-
   );
 };
 
