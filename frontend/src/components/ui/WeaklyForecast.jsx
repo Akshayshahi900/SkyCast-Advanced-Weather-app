@@ -108,7 +108,7 @@ const WeeklyForecast = ({ city }) => {
         <div className="space-y-4">
           {forecast.length > 0 ? (
             forecast.map((day, index) => {
-              // console.log('Date from API:', day.date, typeof day.date);
+             
               return (
                 <div key={index} className="p-4 bg-gray-50 rounded-lg shadow">
                   <div className="flex items-center justify-between">

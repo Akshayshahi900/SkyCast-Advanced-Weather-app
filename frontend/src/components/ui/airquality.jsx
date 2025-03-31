@@ -50,7 +50,7 @@ function AirQuality({ city }) {
       }
       const data = await response.json();
       setAirQualityData(data);
-      console.log(data);
+     
     } catch (error) {
       console.error('Error fetching air quality data:', error);
       setError('Failed to fetch air quality data. Please try again.');

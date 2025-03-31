@@ -52,7 +52,7 @@ app.get('/api/weather', async (req, res) => {
 
     res.json(weatherData)
   } catch (error) {
-    console.error('Error fetching weather data:', error.message)
+  
     res
       .status(500)
       .json({ error: 'Failed to fetch weather data', details: error.message })
@@ -82,7 +82,7 @@ app.get('/api/time', async (req, res) => {
 
     res.json({ datetime })
   } catch (error) {
-    console.error('Error fetching local time:', error.message)
+   
     res
       .status(500)
       .json({ error: 'Failed to fetch local time', details: error.message })
@@ -115,7 +115,7 @@ app.get('/api/geocode', async (req, res) => {
 
     res.json(geometry)
   } catch (error) {
-    console.error('Error fetching geocode data:', error.message)
+   
     res
       .status(500)
       .json({ error: 'Failed to fetch geocode data', details: error.message })
@@ -138,7 +138,7 @@ app.get('/api/timezone', async (req, res) => {
     )
     res.json(response.data)
   } catch (error) {
-    console.error('Error fetching timezone data:', error.message)
+   
     res
       .status(500)
       .json({ error: 'Failed to fetch timezone data', details: error.message })
@@ -167,7 +167,7 @@ app.get('/api/forecast', async (req, res) => {
     )
     res.json(response.data)
   } catch (error) {
-    console.error('Error fetching weather forecast:', error.message)
+   
     res.status(500).json({
       error: 'Error fetching weather forecast',
       details: error.message
@@ -202,7 +202,7 @@ app.get('/api/weekly', async (req, res) => {
     const processedForecast = processWeatherData(response.data.list)
     res.json({ forecast: processedForecast })
   } catch (error) {
-    console.error('Weather API Error:', error.response?.data || error.message)
+   
     res.status(error.response?.status || 500).json({
       error: 'Failed to fetch weekly forecast data',
       details: error.response?.data?.message || error.message
@@ -244,7 +244,7 @@ function processWeatherData(forecastList) {
 
 //news
 app.get('/api/news', async (req, res) => {
-  console.log("API endpoint hit");
+
   const newsApiKey = process.env.NEWS_KEY;
 
   // Get the limit from the query parameters, default to 12 if not provided
@@ -255,20 +255,17 @@ app.get('/api/news', async (req, res) => {
       `https://newsapi.org/v2/everything?q=weather&apiKey=${newsApiKey}`
     );
 
-    // Log the entire response to confirm that `articles` exists
-    // console.log('Full API response:', response.data);
+
 
     // If articles is an array, limit it to the specified number
     if (Array.isArray(response.data.articles)) {
       const limitedArticles = response.data.articles.slice(0, limit); // Use dynamic limit
-      // console.log(`Returning ${limit} articles:`, limitedArticles);
+    
       res.json(limitedArticles); // Return the limited articles
     } else {
-      console.error('Error: articles not found or not an array');
       res.status(500).json({ error: 'Failed to process news data' });
     }
   } catch (error) {
-    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
@@ -398,7 +395,6 @@ app.get('/api/air-quality/:city', async (req, res) => {
       precautionaryMeasures: getPrecautionaryMeasures(aqi)
     });
   } catch (error) {
-    console.error("Error fetching air quality data:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -408,5 +404,4 @@ app.get('/api/air-quality/:city', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`)
 })
