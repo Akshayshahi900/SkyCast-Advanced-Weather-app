@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "proxy": "http://localhost:3000",
+  
   "dependencies": {
     "@radix-ui/react-scroll-area": "^1.2.1",
     "@reduxjs/toolkit": "^2.2.8",

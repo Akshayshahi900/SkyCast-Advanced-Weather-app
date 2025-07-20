@@ -36,8 +36,9 @@ const Weather = () => {
     if (!location) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/weather?city=${location}`);
-      if (!response.ok) {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/weather?city=${location}`
+      ); if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
 
@@ -118,17 +119,15 @@ const Weather = () => {
             <div className="justify-center gap-4 mb-4 bg-customWhite p-4 mt-9 w-[40vw] min-h-30 flex rounded-3xl ">
               <button
                 onClick={() => setActiveTab('hourly')}
-                className={`px-4 py-2 rounded-xl text-lg font-semibold ${
-                  activeTab === 'hourly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                }`}
+                className={`px-4 py-2 rounded-xl text-lg font-semibold ${activeTab === 'hourly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                  }`}
               >
                 Hourly
               </button>
               <button
                 onClick={() => setActiveTab('weekly')}
-                className={`px-4 py-2 rounded-xl text-lg font-semibold ${
-                  activeTab === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                }`}
+                className={`px-4 py-2 rounded-xl text-lg font-semibold ${activeTab === 'weekly' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                  }`}
               >
                 Weekly
               </button>

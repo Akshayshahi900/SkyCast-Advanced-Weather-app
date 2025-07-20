@@ -19,7 +19,7 @@ const Button = ({ children, onClick, disabled, className, href, target }) => {
       </a>
     );
   }
-  
+
   return (
     <button
       onClick={onClick}
@@ -44,13 +44,13 @@ function WeatherNews() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/news');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/news`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       setNewsData(data);
     } catch (error) {
       console.error("Error fetching news:", error);
-      setError(error.name === "SyntaxError" 
+      setError(error.name === "SyntaxError"
         ? 'There was an issue with fetching the data. Please check the API URL.'
         : 'Failed to load news. Please try again later.');
     } finally {
@@ -113,9 +113,9 @@ function WeatherNews() {
                 {article.source.name !== "[Removed]" && (
                   <p className="text-sm font-medium text-gray-500 mb-4">Source: {article.source.name}</p>
                 )}
-                <Button 
-                  href={article.url} 
-                  target="_blank" 
+                <Button
+                  href={article.url}
+                  target="_blank"
                   className="w-full text-center inline-flex items-center justify-center"
                 >
                   Read Article

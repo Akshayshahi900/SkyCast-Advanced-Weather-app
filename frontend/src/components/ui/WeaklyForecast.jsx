@@ -17,13 +17,13 @@ function getWeatherIcon(description) {
 // Helper function to format date
 function formatDate(dateString) {
   if (!dateString) return "Invalid Date";
-  
+
   const [day, month, year] = dateString.split('/');
   const date = new Date(year, month - 1, day);
-  
+
   return new Intl.DateTimeFormat("en-US", {
     weekday: "short",
-    month: "short", 
+    month: "short",
     day: "numeric"
   }).format(date);
 }
@@ -54,7 +54,7 @@ const WeeklyForecast = ({ city }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/weekly?city=${encodeURIComponent(city)}`
+          `${process.env.REACT_APP_API_URL}/api/weekly?city=${encodeURIComponent(city)}`
         );
         setForecast(response.data.forecast || []);
         setError("");
@@ -108,7 +108,7 @@ const WeeklyForecast = ({ city }) => {
         <div className="space-y-4">
           {forecast.length > 0 ? (
             forecast.map((day, index) => {
-             
+
               return (
                 <div key={index} className="p-4 bg-gray-50 rounded-lg shadow">
                   <div className="flex items-center justify-between">

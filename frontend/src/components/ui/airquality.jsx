@@ -44,7 +44,7 @@ function AirQuality({ city }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3000/api/air-quality/${cityName}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/air-quality/${cityName}`);
       if (!response.ok) {
         throw new Error('Failed to fetch air quality data');
       }

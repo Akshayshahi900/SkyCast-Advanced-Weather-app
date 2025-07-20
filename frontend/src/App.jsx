@@ -15,7 +15,7 @@ const App = () => {
 
 
         <Weather />
-        {/* <HourlyForecast /> */}
+        
       </div>
     </div>
   )
