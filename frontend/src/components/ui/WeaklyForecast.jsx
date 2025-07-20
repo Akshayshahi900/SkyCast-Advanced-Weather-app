@@ -54,7 +54,8 @@ const WeeklyForecast = ({ city }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/weekly?city=${encodeURIComponent(city)}`
+          `${import.meta.env.VITE_API_URL
+}/api/weekly?city=${encodeURIComponent(city)}`
         );
         setForecast(response.data.forecast || []);
         setError("");

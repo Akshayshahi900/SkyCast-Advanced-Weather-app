@@ -35,7 +35,8 @@ const HourlyForecast = ({ city }) => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}api/forecast?city=${city}`
+          `${import.meta.env.VITE_API_URL
+}api/forecast?city=${city}`
         );
         setForecast(response.data.list.slice(0, 12)); // Get the next 12 hours of data
         setError("");
